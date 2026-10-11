@@ -1,0 +1,391 @@
+/* ---------- РЕТРО-ПИКСЕЛЬ СТИЛЬ ---------- */
+
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+
+:root{
+  --px-green:#7C3AED;
+  --px-green-dark:#5B21B6;
+  --px-green-light:#A78BFA;
+  --px-brown:#8B5CF6;
+  --px-brown-dark:#6D28D9;
+  --px-brown-light:#C4B5FD;
+  --px-stone:#6B7280;
+  --px-stone-dark:#4B5563;
+  --px-stone-light:#9CA3AF;
+  --px-red:#EF4444;
+  --px-red-dark:#B91C1C;
+  --px-gold:#F59E0B;
+  --px-gold-dark:#D97706;
+  --px-ink:#FFFFFF;
+  --px-ink-dim:#D4D4D4;
+  --px-ink-faint:#9E9E9E;
+  --px-bg-0:#0F0A1A;
+  --px-bg-1:#1A1230;
+  --px-glass:rgba(10,5,25,.85);
+  --px-glass-soft:rgba(255,255,255,.08);
+  --px-line:rgba(255,255,255,.15);
+  --px-line-soft:rgba(255,255,255,.08);
+  --px-ring:rgba(167,139,250,.6);
+  --px-glow:rgba(167,139,250,.35);
+  --px-font-display:"Press Start 2P","Courier New",monospace;
+  --px-font-body:"Press Start 2P","Courier New",monospace;
+  --px-ease-pop:cubic-bezier(.22,.9,.28,1);
+}
+
+html.light-theme{
+  --px-bg-0:#F3F0FA;
+  --px-bg-1:#E8E2F5;
+  --px-ink:#1E1033;
+  --px-ink-dim:#4A4A4A;
+  --px-ink-faint:#7D7D7D;
+  --px-glass:rgba(255,255,255,.9);
+  --px-glass-soft:rgba(0,0,0,.06);
+  --px-line:rgba(0,0,0,.2);
+  --px-line-soft:rgba(0,0,0,.1);
+}
+
+*{ image-rendering:pixelated; }
+
+html,body{
+  font-family:var(--px-font-body);
+  font-size:10px;
+  line-height:1.6;
+}
+
+/* ---------- пиксельные рамки ---------- */
+
+.px-border{
+  border:3px solid #000;
+  box-shadow:
+    inset 2px 2px 0 rgba(255,255,255,.25),
+    inset -2px -2px 0 rgba(0,0,0,.25);
+}
+
+.px-border-light{
+  border:3px solid #000;
+  box-shadow:
+    inset 2px 2px 0 rgba(255,255,255,.4),
+    inset -2px -2px 0 rgba(0,0,0,.15);
+}
+
+/* ---------- фон ---------- */
+
+body::before{
+  background:
+    radial-gradient(130% 100% at 12% -10%, rgba(124,179,66,.15), transparent 55%),
+    linear-gradient(180deg, var(--px-bg-1) 0%, var(--px-bg-0) 70%);
+}
+
+/* ---------- шапка ---------- */
+
+.mark-glyph{
+  border:3px solid #000;
+  box-shadow:
+    inset 2px 2px 0 rgba(255,255,255,.3),
+    inset -2px -2px 0 rgba(0,0,0,.3);
+  background:linear-gradient(180deg, var(--px-green-light), var(--px-green-dark));
+}
+
+.mark-glyph svg{
+  filter:drop-shadow(2px 2px 0 rgba(0,0,0,.5));
+}
+
+.mark-text h1{
+  font-family:var(--px-font-display);
+  font-size:14px;
+  letter-spacing:0;
+  background:linear-gradient(180deg, #FFF 20%, var(--px-gold) 80%);
+  -webkit-background-clip:text;
+  background-clip:text;
+  -webkit-text-fill-color:transparent;
+  filter:drop-shadow(2px 2px 0 rgba(0,0,0,.6));
+}
+
+.meta{
+  font-size:8px;
+  letter-spacing:0;
+}
+
+/* ---------- бейджи ---------- */
+
+.badge{
+  border:2px solid #000;
+  box-shadow:
+    inset 1px 1px 0 rgba(255,255,255,.3),
+    inset -1px -1px 0 rgba(0,0,0,.3);
+  font-size:7px;
+  letter-spacing:.05em;
+  text-transform:uppercase;
+}
+
+.badge-dot{
+  width:6px;height:6px;
+  border:1px solid #000;
+}
+
+/* ---------- кнопки ---------- */
+
+.icon-btn{
+  border:2px solid #000;
+  box-shadow:
+    inset 2px 2px 0 rgba(255,255,255,.3),
+    inset -2px -2px 0 rgba(0,0,0,.3);
+  background:var(--px-stone);
+  width:32px;
+  height:32px;
+}
+
+.icon-btn svg{
+  width:16px;height:16px;
+  filter:drop-shadow(1px 1px 0 rgba(0,0,0,.5));
+}
+
+.icon-btn:hover{
+  background:var(--px-stone-light);
+  transform:none;
+}
+
+.icon-btn:active{
+  box-shadow:
+    inset 2px 2px 0 rgba(0,0,0,.3),
+    inset -2px -2px 0 rgba(255,255,255,.2);
+}
+
+/* ---------- карточка запуска ---------- */
+
+.console-face{
+  border:3px solid #000;
+  box-shadow:
+    inset 2px 2px 0 rgba(255,255,255,.2),
+    inset -2px -2px 0 rgba(0,0,0,.3),
+    4px 4px 0 rgba(0,0,0,.4);
+  background:var(--px-glass);
+}
+
+.console-face::before{
+  display:none;
+}
+
+.console-face::after{
+  display:none;
+}
+
+/* ---------- кнопка Играть ---------- */
+
+.play-btn{
+  border:3px solid #000;
+  box-shadow:
+    inset 3px 3px 0 rgba(255,255,255,.35),
+    inset -3px -3px 0 rgba(0,0,0,.3),
+    4px 4px 0 rgba(0,0,0,.5);
+  background:linear-gradient(180deg, var(--px-green-light), var(--px-green));
+  font-family:var(--px-font-display);
+  font-size:12px;
+  text-shadow:2px 2px 0 rgba(0,0,0,.5);
+  letter-spacing:0;
+}
+
+.play-btn:hover{
+  background:linear-gradient(180deg, #8BC34A, var(--px-green-light));
+  transform:none;
+  box-shadow:
+    inset 3px 3px 0 rgba(255,255,255,.4),
+    inset -3px -3px 0 rgba(0,0,0,.25),
+    4px 4px 0 rgba(0,0,0,.5);
+}
+
+.play-btn:active{
+  box-shadow:
+    inset 3px 3px 0 rgba(0,0,0,.3),
+    inset -3px -3px 0 rgba(255,255,255,.2);
+  transform:translate(2px,2px);
+}
+
+/* ---------- поля ввода ---------- */
+
+input[type="text"], input[type="number"], select{
+  border:2px solid #000;
+  box-shadow:
+    inset 2px 2px 0 rgba(0,0,0,.2),
+    inset -1px -1px 0 rgba(255,255,255,.15);
+  background:var(--px-bg-0);
+  color:var(--px-ink);
+  font-family:var(--px-font-body);
+  font-size:9px;
+}
+
+input:focus, select:focus{
+  outline:2px solid var(--px-green-light);
+  outline-offset:1px;
+}
+
+/* ---------- вкладки ---------- */
+
+.main-tab-btn{
+  border:2px solid #000;
+  box-shadow:
+    inset 1px 1px 0 rgba(255,255,255,.25),
+    inset -1px -1px 0 rgba(0,0,0,.25);
+  background:var(--px-stone-dark);
+  font-family:var(--px-font-body);
+  font-size:8px;
+  letter-spacing:0;
+}
+
+.main-tab-btn.active{
+  background:var(--px-green);
+  color:#FFF;
+  text-shadow:1px 1px 0 rgba(0,0,0,.5);
+}
+
+/* ---------- панели ---------- */
+
+.history, .monitor{
+  border:3px solid #000;
+  box-shadow:
+    inset 2px 2px 0 rgba(255,255,255,.15),
+    inset -2px -2px 0 rgba(0,0,0,.25);
+  background:var(--px-glass);
+}
+
+/* ---------- консоль ---------- */
+
+.console-log{
+  border:2px solid #000;
+  background:#0D0D0D;
+  color:#00FF00;
+  font-family:"Courier New",monospace;
+  font-size:10px;
+  line-height:1.5;
+}
+
+.console-log::-webkit-scrollbar{
+  width:8px;
+}
+
+.console-log::-webkit-scrollbar-track{
+  background:#1A1A1A;
+}
+
+.console-log::-webkit-scrollbar-thumb{
+  background:var(--px-green);
+  border:1px solid #000;
+}
+
+/* ---------- футер ---------- */
+
+.foot{
+  font-size:7px;
+  letter-spacing:0;
+}
+
+/* ---------- онбординг ---------- */
+
+.onboarding-card{
+  border:3px solid #000;
+  box-shadow:
+    inset 2px 2px 0 rgba(255,255,255,.2),
+    inset -2px -2px 0 rgba(0,0,0,.3),
+    6px 6px 0 rgba(0,0,0,.5);
+  background:var(--px-bg-1);
+}
+
+.onboarding-card h3{
+  font-family:var(--px-font-display);
+  font-size:12px;
+}
+
+.onboarding-card p{
+  font-size:8px;
+}
+
+.onboarding-progress{
+  border:2px solid #000;
+  background:var(--px-bg-0);
+}
+
+.onboarding-progress div{
+  background:var(--px-green);
+}
+
+/* ---------- тосты ---------- */
+
+.toast{
+  border:2px solid #000;
+  box-shadow:
+    inset 1px 1px 0 rgba(255,255,255,.25),
+    inset -1px -1px 0 rgba(0,0,0,.25),
+    3px 3px 0 rgba(0,0,0,.4);
+  font-family:var(--px-font-body);
+  font-size:8px;
+}
+
+/* ---------- палитра команд ---------- */
+
+.palette-card{
+  border:3px solid #000;
+  box-shadow:
+    inset 2px 2px 0 rgba(255,255,255,.2),
+    inset -2px -2px 0 rgba(0,0,0,.3),
+    6px 6px 0 rgba(0,0,0,.5);
+}
+
+.palette-item{
+  border:2px solid transparent;
+}
+
+.palette-item.active, .palette-item:hover{
+  border-color:#000;
+  background:var(--px-glass-soft);
+}
+
+/* ---------- компактный режим ---------- */
+
+html.compact-mode .stage{max-width:560px;padding:16px 20px 14px;gap:10px}
+html.compact-mode .mark{gap:8px;flex-wrap:wrap}
+html.compact-mode .mark-glyph{flex:0 0 38px;height:38px}
+html.compact-mode .mark-glyph svg{width:24px;height:24px}
+html.compact-mode .mark-text h1{font-size:10px}
+html.compact-mode .mark-text .meta{font-size:7px}
+html.compact-mode .badges{gap:4px}
+html.compact-mode .badge{padding:5px 8px;font-size:6px}
+html.compact-mode .icon-btn{width:26px;height:26px}
+html.compact-mode .icon-btn svg{width:13px;height:13px}
+html.compact-mode .console-face{padding:12px}
+html.compact-mode .main-tabs{gap:4px;margin:8px 4px 0}
+html.compact-mode .main-tab-btn{padding:5px 8px;font-size:7px}
+html.compact-mode .main-tabpanes{padding:10px}
+html.compact-mode .history, html.compact-mode .monitor{margin:8px 4px 0;padding:8px 10px}
+html.compact-mode .foot{font-size:6px}
+
+/* ---------- анимации ---------- */
+
+@keyframes px-blink{
+  0%,100%{ opacity:1; }
+  50%{ opacity:.5; }
+}
+
+.px-blink{
+  animation:px-blink 1s steps(2) infinite;
+}
+
+/* ---------- скроллбары ---------- */
+
+::-webkit-scrollbar{
+  width:10px;
+  height:10px;
+}
+
+::-webkit-scrollbar-track{
+  background:var(--px-bg-0);
+  border:1px solid #000;
+}
+
+::-webkit-scrollbar-thumb{
+  background:var(--px-stone);
+  border:1px solid #000;
+}
+
+::-webkit-scrollbar-thumb:hover{
+  background:var(--px-stone-light);
+}

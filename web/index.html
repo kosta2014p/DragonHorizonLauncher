@@ -1,0 +1,486 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>DragonHorizonLauncher</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Russo+One&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+<link rel="stylesheet" href="style.css" />
+<link rel="stylesheet" href="pixel.css" />
+</head>
+<body>
+
+  <div class="bg-glow bg-glow--a"></div>
+  <div class="bg-glow bg-glow--b"></div>
+  <canvas id="embers"></canvas>
+
+  <main class="stage">
+    <header class="mark" id="mark">
+      <div class="mark-glyph">
+        <svg viewBox="0 0 64 64" aria-hidden="true">
+          <defs>
+            <radialGradient id="haloGrad" cx=".5" cy=".5" r=".5">
+              <stop offset="0" stop-color="#a78bfa" stop-opacity=".55"/>
+              <stop offset="1" stop-color="#a78bfa" stop-opacity="0"/>
+            </radialGradient>
+            <linearGradient id="dragonGrad" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0" stop-color="#c9a8ff"/>
+              <stop offset=".55" stop-color="#7c3aed"/>
+              <stop offset="1" stop-color="#3c1d7a"/>
+            </linearGradient>
+            <linearGradient id="ridgeGrad" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0" stop-color="#3b2666"/>
+              <stop offset="1" stop-color="#1e1033"/>
+            </linearGradient>
+          </defs>
+          <circle cx="32" cy="31" r="24" fill="url(#haloGrad)"/>
+          <g class="logo-main">
+            <polygon points="41.5,32.5 45.5,32 43,36" fill="#5b21b6"/>
+            <polygon points="46,39 50,38.5 47.5,43" fill="#5b21b6"/>
+            <polygon points="9,42 16,36 26,32 33,30 47,17 40,31 47,35 50,54 29,54 26,48 18,46"
+                     fill="url(#dragonGrad)"/>
+            <polygon points="9,42 16,36 26,32 33,30 47,17 40,31 47,35 50,54 29,54 26,48 18,46"
+                     fill="none" stroke="#e9d5ff" stroke-width="1" opacity=".45"/>
+            <path d="M33 30L47 17" stroke="#e9d5ff" stroke-width="1.6" stroke-linecap="round"/>
+            <path d="M9 42L26 48" stroke="#2a1650" stroke-width="1.5" stroke-linecap="round"/>
+            <path d="M37 45q4 3 8 2M39 50q4 3 8 2" stroke="#2a1650" stroke-width="1.2"
+                  fill="none" opacity=".55" stroke-linecap="round"/>
+            <g id="dragonEye">
+              <circle cx="29" cy="37.5" r="4.2" fill="#d8b4fe" opacity=".8"/>
+              <ellipse id="pupil" cx="29" cy="37.5" rx="2.4" ry="3" fill="#ffffff"/>
+              <path id="pupilLine" d="M29 35V40" stroke="#2a1650" stroke-width="1.1" stroke-linecap="round"/>
+            </g>
+            <circle cx="14" cy="39.5" r=".9" fill="#2a1650"/>
+          </g>
+          <path fill="url(#ridgeGrad)" d="M6 52l14-14 8 9 8-11 10 12 4-4 8 8v6H6v-6Z"/>
+          <rect x="8" y="51.5" width="48" height="2.6" rx="1.3" fill="#a78bfa" opacity=".8"/>
+          <circle cx="49" cy="13" r="1.7" fill="#d8b4fe"/>
+          <circle cx="15" cy="19" r="1.2" fill="#d8b4fe" opacity=".85"/>
+          <circle cx="53" cy="29" r="1" fill="#ede9fe" opacity=".9"/>
+          <path d="M13 31v6M11 34h5" stroke="#d8b4fe" stroke-width="1.4" stroke-linecap="round"/>
+        </svg>
+      </div>
+      <div class="mark-text">
+        <h1 id="modpackName">DragonHorizonLauncher</h1>
+        <p class="meta" id="meta">готов к запуску</p>
+        <span class="veteran" id="veteranBadge" hidden>★ ветеран</span>
+      </div>
+      <div class="badges">
+        <div class="badge" id="serverBadge" style="position:relative;overflow:visible">
+          <span class="badge-dot badge-dot--off" id="serverDot"></span>
+          <span id="serverBadgeText">проверка&hellip;</span>
+          <span id="serverDelta" class="badge-delta" hidden></span>
+        </div>
+        <div class="badge"><span class="badge-dot"></span>офлайн</div>
+        <button class="icon-btn" id="fullscreenBtn" type="button" aria-label="Во весь экран" title="Во весь экран (F11)">▣</button>
+        <button class="icon-btn" id="themeBtn" type="button" aria-label="Тема" title="Светлая/тёмная тема">☀</button>
+        <button class="icon-btn" id="compactBtn" type="button" aria-label="Мини" title="Компакт (Ctrl+M)">☰</button>
+
+      </div>
+    </header>
+
+    <p class="notice" id="versionNotice" hidden></p>
+
+    <section class="console" id="console">
+      <div class="console-face">
+
+        <div class="row row--idle" id="rowIdle">
+          <label class="field" style="position:relative">
+            <span class="field-label">ник</span>
+            <span class="nick-row">
+              <img id="nickAvatar" class="nick-avatar" alt="" hidden />
+              <input id="nickname" class="field-input" type="text" maxlength="16"
+                     placeholder="Player" autocomplete="off" spellcheck="false" />
+              <button id="nickDropBtn" type="button" class="mini-btn" style="padding:6px 8px;font-size:12px" title="История ников">▾</button>
+            </span>
+            <div id="nickHistory" class="nick-history" hidden></div>
+          </label>
+
+          <button id="playBtn" class="play-btn">
+            <span class="play-btn-shine"></span>
+            <span class="play-btn-label">Играть</span>
+          </button>
+          <button id="restartBtn" class="restart-btn" hidden type="button">
+            <span class="restart-btn-label">↻ Перезапустить</span>
+          </button>
+        </div>
+
+        <div class="row row--progress" id="rowProgress" hidden>
+          <div class="progress-head">
+            <div class="progress-status" id="progressStatus">Проверяем обновления&hellip;</div>
+            <div class="progress-pct" id="progressPct">0%</div>
+            <button id="cancelBtn" class="cancel-btn" type="button" title="Отменить загрузку">✕ Отмена</button>
+          </div>
+          <div class="progress-track">
+            <div class="progress-fill" id="progressFill"></div>
+            <div class="progress-shimmer"></div>
+          </div>
+          <div class="progress-stages" id="progressStages" style="display:flex;gap:6px;font-size:10px;color:var(--ink-faint);margin-top:4px"></div>
+          <div class="progress-speed" id="progressSpeed" hidden></div>
+          <canvas id="speedChart" width="260" height="40" style="width:100%;height:40px;display:none;background:rgba(0,0,0,.2);border-radius:8px;margin-top:6px"></canvas>
+        </div>
+
+      </div>
+    </section>
+
+    <nav class="main-tabs" role="tablist" id="mainTabs">
+      <button class="main-tab-btn active" data-mtab="main" role="tab" aria-selected="true" type="button">Основное</button>
+      <button class="main-tab-btn" data-mtab="launch" role="tab" type="button">Запуск</button>
+      <button class="main-tab-btn" data-mtab="look" role="tab" type="button">Вид</button>
+      <button class="main-tab-btn" data-mtab="skin" role="tab" type="button">Скин</button>
+      <button class="main-tab-btn" data-mtab="extra" role="tab" type="button">Прочее</button>
+      <button class="main-tab-btn" data-mtab="console" role="tab" type="button">Консоль</button>
+    </nav>
+    <div class="main-tabpanes" id="mainTabPanes">
+      <div class="main-tabpane active" id="mtab-main" role="tabpanel">
+        <div class="settings-group">
+          <span class="field-label">озу &middot; <b id="settingsRamValue">4 ГБ</b></span>
+          <input id="settingsRam" class="field-range" type="range" min="2048" max="16384" step="512" value="4096" />
+          <small class="settings-hint" id="settingsRamHint">определяем память&hellip;</small>
+          <small class="settings-hint rec-row" id="settingsRamRecRow" hidden>рекомендуется: <b id="settingsRamRec"></b><button class="link-btn" id="ramApplyBtn" type="button">Применить</button></small>
+          <small class="settings-warn" id="settingsRamWarn" hidden></small>
+        </div>
+        <label class="settings-row">
+          <span>Экономный режим<br><small>меньше эффектов — быстрее на слабых ПК</small></span>
+          <input type="checkbox" id="perfMode" class="switch" />
+        </label>
+      </div>
+      <div class="main-tabpane" id="mtab-launch" role="tabpanel" hidden>
+        <label class="settings-row">
+          <span>Закрывать лаунчер после запуска игры</span>
+          <input type="checkbox" id="closeOnLaunch" class="switch" />
+        </label>
+        <label class="settings-row">
+          <span>Таймер закрытия (13)<br><small>если включено выше</small></span>
+          <select id="autoCloseDelay" class="settings-select">
+            <option value="0">Сразу (1с)</option>
+            <option value="3">3 сек</option>
+            <option value="5">5 сек</option>
+            <option value="10">10 сек</option>
+            <option value="15">15 сек</option>
+            <option value="30">30 сек</option>
+          </select>
+        </label>
+        <label class="settings-row">
+          <span>Режим «только лаунчер»<br><small>обновляет сборку, но не запускает игру</small></span>
+          <input type="checkbox" id="launcherOnly" class="switch" />
+        </label>
+        <label class="settings-row">
+          <span>Лимит скорости (41)<br><small>0 — без лимита</small></span>
+          <select id="downloadLimit" class="settings-select">
+            <option value="0">Без лимита</option>
+            <option value="512">512 КБ/с</option>
+            <option value="1024">1 МБ/с</option>
+            <option value="2048">2 МБ/с</option>
+            <option value="5120">5 МБ/с</option>
+            <option value="10240">10 МБ/с</option>
+          </select>
+        </label>
+        <div class="settings-group">
+          <span class="field-label">свой путь к java (необязательно)</span>
+          <input id="javaPath" class="field-input settings-input" type="text"
+                 placeholder="оставь пустым для автоопределения" autocomplete="off" spellcheck="false" />
+        </div>
+        <div class="settings-group">
+          <span class="field-label">доп. аргументы jvm (необязательно)</span>
+          <input id="jvmArgs" class="field-input settings-input" type="text"
+                 placeholder="напр. -XX:+UseG1GC" autocomplete="off" spellcheck="false" />
+        </div>
+      </div>
+      <div class="main-tabpane" id="mtab-look" role="tabpanel" hidden>
+        <label class="settings-row">
+          <span>Тема<br><small>светлая / тёмная</small></span>
+          <select id="themeSelect" class="settings-select">
+            <option value="dark">Тёмная</option>
+            <option value="light">Светлая</option>
+          </select>
+        </label>
+        <label class="settings-row">
+          <span>Звуки интерфейса<br><small>клики, успех, ошибка</small></span>
+          <input type="checkbox" id="soundsEnabled" class="switch" checked />
+        </label>
+        <label class="settings-row">
+          <span>Сворачивать в трей<br><small>вместо закрытия на крестик</small></span>
+          <input type="checkbox" id="trayMinimize" class="switch" />
+        </label>
+        <label class="settings-row">
+          <span>Запускать свернутым (36)<br><small>в трей при старте</small></span>
+          <input type="checkbox" id="startMinimized" class="switch" />
+        </label>
+        <label class="settings-row">
+          <span>Компактный режим (34)<br><small>маленькое окно</small></span>
+          <input type="checkbox" id="compactMode" class="switch" />
+        </label>
+        <label class="settings-row">
+          <span>Фон-музыка<br><small>атмосфера лаунчера</small></span>
+          <input type="checkbox" id="musicEnabled" class="switch" />
+        </label>
+        <label class="settings-row">
+          <span>Кастомный курсор<br><small>дракон вместо стрелки</small></span>
+          <input type="checkbox" id="customCursor" class="switch" />
+        </label>
+        <label class="settings-row">
+          <span>Язык / Language<br><small>RU / EN</small></span>
+          <select id="langSelect" class="settings-select">
+            <option value="ru">RU</option>
+            <option value="en">EN</option>
+          </select>
+        </label>
+        <div class="settings-group" style="margin-top:6px">
+          <span class="field-label">скриншоты</span>
+          <div class="screenshot-carousel" id="screenshotCarousel">
+            <button class="mini-btn" id="scrPrev" type="button">‹</button>
+            <img id="scrImg" alt="Скриншоты" style="max-width:240px;max-height:140px;border-radius:8px;object-fit:contain;background:rgba(0,0,0,.25);min-width:240px;min-height:100px" />
+            <button class="mini-btn" id="scrNext" type="button">›</button>
+          </div>
+          <small class="settings-hint" id="scrHint">папка screenshots/ — пусто</small>
+          <div style="display:flex;gap:8px;flex-wrap:wrap">
+            <button class="mini-btn" id="scrRefresh" type="button">Обновить</button>
+            <button class="mini-btn" id="scrOpenFolder" type="button">Открыть папку</button>
+          </div>
+        </div>
+      </div>
+      <div class="main-tabpane" id="mtab-skin" role="tabpanel" hidden>
+        <div class="settings-group">
+          <span class="field-label">скин по нику</span>
+          <div class="skin-row">
+            <input id="skinNick" class="field-input settings-input" type="text" maxlength="16"
+                   placeholder="ник со скином" autocomplete="off" spellcheck="false" />
+            <button class="mini-btn" id="skinShowBtn" type="button">Показать</button>
+          </div>
+          <div class="skin-preview" id="skinPreview" hidden>
+            <img id="skinBodyImg" alt="Скин" />
+            <canvas id="skin3dCanvas" hidden width="120" height="180" style="width:80px;height:120px;background:rgba(0,0,0,.25);border-radius:8px"></canvas>
+            <div class="skin-meta"><b id="skinName"></b><small id="skinModel"></small><img id="capeImg" alt="Плащ" hidden style="width:64px;margin-top:6px;border-radius:4px;background:rgba(0,0,0,.2)" /><button class="mini-btn" id="skin3dBtn" type="button" hidden style="margin-top:6px;padding:6px 8px;font-size:11px">3D</button></div>
+          </div>
+          <small class="settings-hint" id="skinStatus">превью скина с серверов Mojang</small>
+          <div style="display:flex;gap:8px;flex-wrap:wrap">
+            <button class="repair-btn" id="skinUseBtn" type="button" hidden>Использовать этот скин</button>
+            <button class="mini-btn" id="skinExportBtn" type="button" hidden>Скачать .png</button>
+          </div>
+          <label class="settings-row" style="margin-top:8px">
+            <span>Элитра<br><small>показать крылья в 3D</small></span>
+            <input type="checkbox" id="elytraCheck" class="switch" />
+          </label>
+        </div>
+        <div class="settings-group">
+          <span class="field-label">импорт из файла .png (18)</span>
+          <div class="skin-row">
+            <input id="skinFile" type="file" accept=".png" hidden />
+            <button class="mini-btn" id="skinFileBtn" type="button">Выбрать .png</button>
+            <small id="skinFileName" class="settings-hint"></small>
+          </div>
+          <small class="settings-hint">64×64 / 64×32 — официальный формат скина</small>
+        </div>
+        <label class="settings-row">
+          <span>Автоповорот 3D<br><small>модель крутится сама</small></span>
+          <input type="checkbox" id="skinAutoRotate" class="switch" checked />
+        </label>
+        <div class="settings-group" id="skinGalleryGroup" hidden>
+          <span class="field-label">последние скины (19)</span>
+          <div class="skin-gallery" id="skinGallery"></div>
+        </div>
+        <div class="settings-group">
+          <span class="field-label">редактор 64×64 (12)</span>
+          <div style="display:flex;gap:12px;align-items:flex-start;flex-wrap:wrap">
+            <canvas id="skinEditCanvas" width="64" height="64" style="width:128px;height:128px;image-rendering:pixelated;border:1px solid var(--line-soft);border-radius:8px;cursor:crosshair;background:repeating-conic-gradient(#1a1625 0% 25%, #0d0a16 0% 50%) 0 0 /16px 16px"></canvas>
+            <div style="display:flex;flex-direction:column;gap:8px">
+              <input id="skinEditColor" type="color" value="#ff0000" style="width:48px;height:32px;padding:0;border:1px solid var(--line-soft);border-radius:8px;background:transparent;cursor:pointer">
+              <div style="display:flex;gap:6px">
+                <button class="mini-btn" id="skinEditClear" type="button">Очистить</button>
+                <button class="mini-btn" id="skinEditExport" type="button">Экспорт</button>
+              </div>
+              <small class="settings-hint">клик — пиксель, экспорт → импорт</small>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="main-tabpane" id="mtab-extra" role="tabpanel" hidden>
+        <div class="settings-group" id="authGroup" hidden>
+          <span class="field-label">аккаунт</span>
+          <div class="auth-row">
+            <div class="auth-who">
+              <div class="auth-nick" id="authNick">—</div>
+              <small class="settings-hint" id="authRole"></small>
+            </div>
+            <button class="repair-btn" id="logoutBtn" type="button">Выйти</button>
+          </div>
+          <small class="settings-hint">ник в игре = ник аккаунта на сайте</small>
+        </div>
+        <div class="settings-group">
+          <span class="field-label">ресурспаки</span>
+          <div class="rp-list" id="rpList"></div>
+          <div class="rp-actions">
+            <input id="rpUrl" class="field-input settings-input" type="text"
+                   placeholder="URL .zip ресурспака" autocomplete="off" spellcheck="false" />
+            <button class="mini-btn" id="rpInstallBtn" type="button">Установить</button>
+          </div>
+          <small class="settings-hint">Паки лежат в .minecraft/resourcepacks/ — выберите в игре</small>
+        </div>
+        <div class="settings-group">
+          <span class="field-label">шейдеры (21) — shaderpacks</span>
+          <div class="rp-list" id="shaderList"></div>
+          <div class="rp-actions">
+            <input id="shaderUrl" class="field-input settings-input" type="text" placeholder="URL .zip шейдера" autocomplete="off" spellcheck="false" />
+            <button class="mini-btn" id="shaderInstallBtn" type="button">Установить</button>
+          </div>
+          <small class="settings-hint">Шейдеры лежат в .minecraft/shaderpacks/ — выберите в игре (Optifine/Iris)</small>
+        </div>
+        <div class="settings-group">
+          <span class="field-label">антивирус (40)</span>
+          <button class="repair-btn" id="avCheckBtn" type="button">Проверить Защитник</button>
+          <small class="settings-hint" id="avHint"></small>
+        </div>
+        <div class="settings-group">
+          <span class="field-label">восстановление</span>
+          <button class="repair-btn" id="repairBtn" type="button">Починить сборку</button>
+          <small class="settings-hint" id="repairHint">перекачает сборку при следующем запуске</small>
+        </div>
+        <div class="settings-group">
+          <span class="field-label">анти-чит BlackList</span>
+          <button class="repair-btn" id="cheatCheckBtn" type="button">Проверить на читы</button>
+          <small class="settings-hint" id="cheatHint"></small>
+        </div>
+        <div class="settings-group">
+          <span class="field-label">диагностика</span>
+          <button class="repair-btn" id="diagBtn" type="button">Проверить систему</button>
+          <div class="diag-list" id="diagList" hidden></div>
+        </div>
+        <div class="settings-group">
+          <button class="settings-reset" id="settingsReset" type="button">Сбросить настройки</button>
+          <button class="settings-reset" id="factoryReset" type="button" style="color:#ff6b5e;margin-top:8px">Сбросить всё как с начала</button>
+        </div>
+      </div>
+      <div class="main-tabpane" id="mtab-console" role="tabpanel" hidden>
+        <div class="settings-group">
+          <span class="field-label">консоль — логи лаунчера и игры</span>
+          <div class="console-toolbar">
+            <button class="mini-btn" id="consoleCopy" type="button">Копировать</button>
+            <button class="mini-btn" id="consoleClear" type="button">Очистить</button>
+            <button class="mini-btn" id="consoleExport" type="button">Экспорт логов (39)</button>
+            <button class="mini-btn" id="consoleFolder" type="button">Папка logs</button>
+            <button class="mini-btn" id="consoleCrashBtn" type="button">Краши</button>
+            <button class="mini-btn" id="consoleGameDir" type="button">Папка игры</button>
+            <label class="settings-row" style="gap:8px;margin-left:auto;font-size:11px;cursor:pointer">
+              <span>Автоскролл</span><input type="checkbox" id="consoleAutoScroll" class="switch" checked style="width:32px;height:18px" />
+            </label>
+          </div>
+          <pre id="consoleLog" class="console-log" aria-live="polite">[00:00:00] Консоль готова</pre>
+          <small class="settings-hint" id="consoleHint">показывает события лаунчера + вывод Minecraft (stdout)</small>
+        </div>
+        <div class="settings-group">
+          <span class="field-label">latest.log — последние 200 строк</span>
+          <pre id="latestLog" class="console-log" style="max-height:160px">— нет файла —</pre>
+          <div style="display:flex;gap:8px;flex-wrap:wrap">
+            <button class="mini-btn" id="latestRefresh" type="button">Обновить</button>
+            <button class="mini-btn" id="latestOpen" type="button">Открыть папку</button>
+            <small class="settings-hint" id="crashHint" style="align-self:center"></small>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <section class="history" id="historyBlock" hidden>
+      <div class="history-head">
+        <span>онлайн за сутки</span>
+        <span id="historyHint"></span>
+      </div>
+      <canvas id="onlineChart" height="44"></canvas>
+      <div class="stats-row" id="statsRow">
+        <span id="statsText">запусков: 0 · в игре: 0 ч</span>
+      </div>
+      <div class="ach-grid" id="achGrid" aria-label="Достижения"></div>
+      <div class="stats-row" id="onlineSample" hidden style="font-size:11px;color:var(--ink-faint);margin-top:6px;display:flex;flex-wrap:wrap;gap:6px;align-items:center"></div>
+    </section>
+
+    <section class="monitor" id="monitorBlock" hidden>
+      <div class="monitor-head">
+        <span>Мониторинг игры</span>
+        <span id="monitorStatus">ожидание&hellip;</span>
+      </div>
+      <div id="hangHint" class="notice" hidden style="margin:0 0 8px;padding:8px 12px;font-size:11px;align-items:center;gap:8px"><span>Игра зависла (CPU 0% 30с)</span><button id="hangKill" class="mini-btn" type="button" style="margin-left:auto;padding:6px 10px">Убить процесс</button></div>
+      <div class="monitor-grid">
+        <div class="monitor-card">
+          <span class="monitor-label">CPU</span>
+          <span class="monitor-value" id="monitorCpu">—</span>
+        </div>
+        <div class="monitor-card">
+          <span class="monitor-label">RAM</span>
+          <span class="monitor-value" id="monitorMem">—</span>
+        </div>
+        <div class="monitor-card">
+          <span class="monitor-label">TPS</span>
+          <span class="monitor-value" id="monitorTps">—</span>
+        </div>
+        <div class="monitor-card">
+          <span class="monitor-label">Игроки</span>
+          <span class="monitor-value" id="monitorPlayers">—</span>
+        </div>
+      </div>
+    </section>
+
+    <div id="toastContainer" style="position:fixed;right:16px;bottom:16px;z-index:30;display:flex;flex-direction:column;gap:8px;pointer-events:none"></div>
+    <p class="error" id="errorMsg" hidden title="Нажми чтобы скопировать"></p>
+
+    <footer class="foot">
+      <span class="foot-hint"><kbd>Enter</kbd> запуск · <kbd>F5</kbd> играть · <kbd>Ctrl+L</kbd> чистка · <kbd>Ctrl+K</kbd> вкладки · <kbd>Ctrl+M</kbd> компакт</span>
+      <span id="footVer" style="opacity:.55"></span>
+      <span>сборка обновляется автоматически</span>
+    </footer>
+  </main>
+
+
+
+  <!-- Вход: лаунчер закрыт без учётки с сайта. Проверка — Api.auth_state,
+       форма шлёт Api.login. Оверлей выше всех остальных (z-index 30). -->
+  <div class="auth-overlay" id="authOverlay" hidden>
+    <div class="auth-card" role="dialog" aria-label="Вход в лаунчер">
+      <svg class="auth-logo" viewBox="0 0 64 64" aria-hidden="true">
+        <defs>
+          <linearGradient id="authG" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0" stop-color="#c9a8ff"/><stop offset=".55" stop-color="#7c3aed"/><stop offset="1" stop-color="#3c1d7a"/>
+          </linearGradient>
+        </defs>
+        <polygon points="9,42 26,32 47,17 40,31 50,54 29,54 26,48 18,46" fill="url(#authG)"/>
+        <circle cx="29" cy="37.5" r="3.4" fill="#fff" opacity=".95"/>
+      </svg>
+      <h3>Вход в лаунчер</h3>
+      <p>Лаунчер открывается по учётке с сайта DragonHorizon — аккаунт выдаёт администратор.</p>
+      <label class="field-label" for="authUser">ник</label>
+      <input id="authUser" class="field-input settings-input" type="text"
+             autocomplete="username" spellcheck="false" maxlength="24" />
+      <label class="field-label" for="authPass">пароль</label>
+      <input id="authPass" class="field-input settings-input" type="password"
+             autocomplete="current-password" maxlength="128" />
+      <div class="auth-error" id="authError" hidden></div>
+      <div class="onboarding-actions">
+        <button class="link-btn" id="authForgot" type="button">Сменить пароль на сайте</button>
+        <button class="repair-btn" id="authBtn" type="button">Войти</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="palette" class="palette-overlay" hidden>
+    <div class="palette-card" role="dialog" aria-label="Палитра">
+      <input id="paletteInput" class="field-input settings-input" type="text" placeholder="Поиск команды…" autocomplete="off" spellcheck="false" />
+      <div id="paletteList" class="palette-list"></div>
+      <small class="settings-hint">↑↓ выбор · Enter выполнить · Esc закрыть</small>
+    </div>
+  </div>
+  <div class="onboarding-overlay" id="onboarding" hidden>
+    <div class="onboarding-card" role="dialog" aria-label="Первый запуск">
+      <div class="onboarding-progress"><div id="onbProgress" style="width:25%"></div></div>
+      <h3 id="onbTitle">Добро пожаловать!</h3>
+      <p id="onbText">Это DragonHorizon Launcher. Давай настроим за 30 секунд.</p>
+      <div class="onboarding-actions">
+        <button class="link-btn" id="onbSkip" type="button">Пропустить</button>
+        <button class="repair-btn" id="onbNext" type="button">Далее →</button>
+      </div>
+    </div>
+  </div>
+
+<script src="app.js"></script>
+</body>
+</html>
